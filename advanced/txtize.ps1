@@ -1,5 +1,5 @@
 # Specify the path to the directory
-$directoryPath = "E:\code"
+$directoryPath = "C:\Users\Srulik's User\OneDrive\Documents\SideQuester - Copy"
 
 # Get all files in the directory and its subdirectories
 Get-ChildItem -Path $directoryPath -File -Recurse | ForEach-Object {

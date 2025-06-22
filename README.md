@@ -11,6 +11,7 @@ You will need to complete the following steps once on a given computer to use th
 ### 1. Install Python
 
 1. Go to the [official Python website](https://www.python.org/) and download Python for Windows.
+![image showing the button on the python website](docs/images/python-download.png)
 2. Open the installer and follow the on-screen instructions. The default options should work fine for most users.
 
 ### 2. Download This Repository
