@@ -1,5 +1,5 @@
 $folderPath = "D:\"
-Get-ChildItem -Path $folderPath -Recurse -Include *.opus, *.webm | ForEach-Object {
+Get-ChildItem -Path $folderPath -Recurse -Include *.opus, *.webm *.mp4 | ForEach-Object {
     $inputFile = $_.FullName
     $outputFile = [System.IO.Path]::ChangeExtension($inputFile, ".mp3")
 
