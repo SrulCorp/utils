@@ -12,7 +12,7 @@ def prepend_numbers_to_audio_files(folder_path, start_number):
                   glob.glob(os.path.join(folder_path, '*.m4a'))
 
     # Sort files by creation time
-    audio_files.sort(key=os.path.getctime)
+    audio_files.sort(key=os.path.getctime) #change to mtime for modified. beh.
 
     # Prepend numbers to file names, ignoring files already numbered
     number_pattern = re.compile(r'^\d{3} - ')

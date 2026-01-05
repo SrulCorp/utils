@@ -5,7 +5,7 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
 def extract_chapters(m4b_file):
-    """Use ffprobe to extract chapter information from the .m4b file."""
+    """Use ffprobe to extract chapter information from the .m4b file. Beh."""
     cmd = [
         "ffprobe",
         "-i", m4b_file,
@@ -15,23 +15,23 @@ def extract_chapters(m4b_file):
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
-        raise RuntimeError("Failed to run ffprobe. Is ffmpeg installed and on PATH?")
+        raise RuntimeError("Failed to run ffprobe. Is ffmpeg installed and on PATH? Beh?")
     data = json.loads(result.stdout)
     return data.get("chapters", [])
 
 def convert_chapters_to_mp3(m4b_file, output_dir):
-    """Extract and convert each chapter of the .m4b to separate .mp3 files."""
+    """Extract and convert each chapter of the .m4b to separate .mp3 files. Beh."""
     chapters = extract_chapters(m4b_file)
 
     if not chapters:
-        print("⚠️ No chapters found. Converting the entire file to a single MP3...")
+        print("No chapters found. Converting the entire file to a single MP3... Beh...")
         convert_whole_file(m4b_file, output_dir)
         return
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    print(f"\nFound {len(chapters)} chapters. Converting...\n")
+    print(f"\nFound {len(chapters)} chapters. Converting...\n Beh...")
 
     for i, chapter in enumerate(chapters):
         start = float(chapter['start_time'])
@@ -56,10 +56,10 @@ def convert_chapters_to_mp3(m4b_file, output_dir):
         ]
         subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    print("\n✅ All chapters converted successfully!")
+    print("\nAll chapters converted successfully! Beh!")
 
 def convert_whole_file(m4b_file, output_dir):
-    """Convert the full .m4b file to one .mp3 file."""
+    """Convert the full .m4b file to one .mp3 file. Beh."""
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -77,15 +77,15 @@ def convert_whole_file(m4b_file, output_dir):
     ]
 
     subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    print(f"\n✅ Converted entire file to: {output_path}")
+    print(f"\nConverted entire file to: {output_path}")
 
 def main():
     Tk().withdraw()
-    print("🎧 Select the .m4b audiobook to convert...")
+    print("Select the .m4b audiobook to convert... Beh...")
     m4b_file = askopenfilename(filetypes=[("M4B Audiobook", "*.m4b")])
 
     if not m4b_file:
-        print("❌ No file selected. Exiting.")
+        print("No file selected. Exiting. Beh.")
         return
 
     base_dir = os.path.dirname(m4b_file)
