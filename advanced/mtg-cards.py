@@ -62,12 +62,24 @@ def sanitize_filename(text: str) -> str:
     return "".join(c for c in text if c.isalnum() or c in (" ", "-", "_")).rstrip()
 
 
-def download_image(url: str, filename: str) -> None:
+def download_image(url: str, filepath: str) -> None:
     r = requests.get(url, stream=True)
     r.raise_for_status()
-    with open(filename, "wb") as f:
+    with open(filepath, "wb") as f:
         for chunk in r.iter_content(8192):
             f.write(chunk)
+
+
+def get_unique_filepath(directory: str, filename: str) -> str:
+    base, ext = os.path.splitext(filename)
+    counter = 1
+    candidate = filename
+
+    while os.path.exists(os.path.join(directory, candidate)):
+        counter += 1
+        candidate = f"{base}_{counter}{ext}"
+
+    return os.path.join(directory, candidate)
 
 
 def resolve_card(row: Dict) -> Optional[Dict]:
@@ -102,18 +114,14 @@ def main():
         set_code = card.get("set", "unknown")
         collector_number = card.get("collector_number", "0")
 
-        filename = f"{card_name}_{set_code}_{collector_number}.jpg"
-        filepath = os.path.join(OUTPUT_DIR, filename)
-
-        if os.path.exists(filepath):
-            print("Already downloaded:", filename)
-            continue
+        base_filename = f"{card_name}_{set_code}_{collector_number}.jpg"
+        filepath = get_unique_filepath(OUTPUT_DIR, base_filename)
 
         try:
             download_image(image_url, filepath)
-            print("Downloaded:", filename)
+            print("Downloaded:", os.path.basename(filepath))
         except Exception as e:
-            print("Failed:", filename, e)
+            print("Failed:", os.path.basename(filepath), e)
 
         time.sleep(REQUEST_DELAY)
 

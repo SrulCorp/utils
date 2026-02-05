@@ -57,7 +57,7 @@ def organize_audio_files(source_dir, destination_dir):
                 print(f"Moved: {file} → {dest_path}")
 
 # Example usage
-source_directory = r"F:\Music"
-destination_directory = r"F:\Sorted"
+source_directory = r"C:\Users\SrulC\Music\Tom MacDonald"
+destination_directory = r"C:\Users\SrulC\Music\Tom MacDonald Sorted"
 
 organize_audio_files(source_directory, destination_directory)
