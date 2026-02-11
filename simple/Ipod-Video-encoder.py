@@ -2,11 +2,12 @@ import subprocess
 from pathlib import Path
 
 # ---------------- PROFILES ----------------
+# Format: name, video bitrate, audio bitrate, fps, VBV buffer (bytes)
 
 PROFILES = {
-    "1": ("Ultra-small", "6", "64k", "20"),
-    "2": ("Balanced",    "4", "96k", "24"),
-    "3": ("High quality","3", "128k","24"),
+    "1": ("Ultra-small", "350k", "64k",  "20", "65536"),    # VBV = 16 KB
+    "2": ("Balanced",    "500k", "96k",  "24", "65536"),    # VBV = 64 KB
+    "3": ("High quality","700k", "128k", "24", "98304"),    # VBV = 96 KB
 }
 
 VIDEO_EXTS = {".mp4", ".mkv", ".avi", ".mov", ".webm", ".flv", ".wmv", ".mpg", ".mpeg"}
@@ -24,7 +25,7 @@ def ask(prompt, default=None):
 
 
 def main():
-    print("\nRockbox iPod Classic 6G Video Encoder\n")
+    print("\nRockbox MPEG Encoder — Maximum Stability Profile\n")
 
     src_dir = Path(ask("Source directory", "D:\\Videos"))
     out_dir = Path(ask("Output directory", "D:\\iPodVideos"))
@@ -39,7 +40,7 @@ def main():
         print("Invalid selection.")
         return
 
-    name, qv, ab, fr = PROFILES[profile]
+    name, vb, ab, fr, bufsize = PROFILES[profile]
 
     mode = ask("Aspect ratio mode: letterbox or crop", "letterbox").lower()
 
@@ -62,7 +63,7 @@ def main():
     for video in src_dir.rglob("*"):
         if video.suffix.lower() in VIDEO_EXTS:
             out_path = out_dir / video.relative_to(src_dir)
-            out_path = out_path.with_suffix(".avi")
+            out_path = out_path.with_suffix(".mpg")
             out_path.parent.mkdir(parents=True, exist_ok=True)
 
             if out_path.exists():
@@ -70,17 +71,33 @@ def main():
                 continue
 
             print(f"Encoding: {video}")
+
             cmd = [
                 "ffmpeg", "-y",
                 "-i", str(video),
+
+                # Video scaling & timing
                 "-vf", vf,
-                "-c:v", "mpeg4",
-                "-q:v", qv,
-                "-maxrate", "800k",
-                "-bufsize", "800k",
                 "-r", fr,
-                "-c:a", "mp3",
+
+                # Video — MPEG-1 tuned for Rockbox stability
+                "-c:v", "mpeg1video",
+                "-b:v", vb,
+                "-maxrate", vb,
+                "-bufsize", bufsize,
+                "-g", "12",
+                "-bf", "0",
+                "-pix_fmt", "yuv420p",
+
+                # Audio — MP2 (Rockbox native)
+                "-c:a", "mp2",
                 "-b:a", ab,
+                "-ar", "44100",
+                "-ac", "2",
+
+                # Container
+                "-f", "mpeg",
+
                 str(out_path)
             ]
 
