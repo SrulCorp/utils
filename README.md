@@ -36,6 +36,14 @@ You can run a script by double-clicking the file. If prompted to choose how to o
 - Select the **Python** app for `.py` files.
 - Select **PowerShell** for `.ps1` or `.ps` files.
 
+(Advanced) You can also set up the python scripts to run via command prompt (on windows). Go to `C:/Users/<Your User>`, and create a file named `utils.cmd`. Open the file with notepad and paste the following into it:
+`@echo off`
+`python "<Path/To/Utils/Directory>" %*`
+Replace `<Path/To/Utils/Directory>` with the path you extracted utils to.
+
+Now, you can run a script by typing `./utils/<filename>`, with `<filename>` being the name of the script.
+
+
 ### Script Descriptions
 
 TODO
