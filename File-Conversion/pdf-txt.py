@@ -1,6 +1,12 @@
 import os
 import pdfminer.high_level
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def convert_pdf_to_text(pdf_path, txt_path):
     """Converts a single PDF file to a text file."""
     try:
@@ -21,7 +27,7 @@ def process_directory(root_dir):
                 convert_pdf_to_text(pdf_path, txt_path)
 
 if __name__ == "__main__":
-    input_dir = input("Enter the directory path: ").strip()
+    input_dir = normalize_path_input(input("Enter the directory path: "))
     
     if not os.path.isdir(input_dir):
         print("Invalid directory. Please enter a valid path.")

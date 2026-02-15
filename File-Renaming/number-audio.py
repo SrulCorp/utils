@@ -8,6 +8,12 @@ MEDIA_EXTENSIONS = [
     '*.mp4', '*.mkv', '*.avi', '*.mov', '*.wmv', '*.flv', '*.webm'  # video
 ]
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def prepend_numbers_to_media_files(folder_path, start_number):
     media_files = []
 
@@ -38,7 +44,7 @@ def prepend_numbers_to_media_files(folder_path, start_number):
 
 
 if __name__ == "__main__":
-    folder_path = input("Enter the folder path: ")
+    folder_path = normalize_path_input(input("Enter the folder path: "))
 
     while True:
         try:

@@ -1,6 +1,12 @@
 import os
 import shutil
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def organize_files_by_letter(directory):
     # Create a folder for subfolders
     folders_path = os.path.join(directory, "folders")
@@ -28,7 +34,7 @@ def organize_files_by_letter(directory):
             shutil.move(item_path, os.path.join(letter_folder, item))
 
 # Prompt the user for the directory path
-directory_path = input("Enter the directory path to organize: ").strip()
+directory_path = normalize_path_input(input("Enter the directory path to organize: "))
 
 # Check if the provided path is valid
 if os.path.isdir(directory_path):

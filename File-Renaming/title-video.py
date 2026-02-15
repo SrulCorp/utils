@@ -4,6 +4,12 @@ import tempfile
 
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".mov", ".avi", ".webm", ".flv"}
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def update_title(video_path: pathlib.Path):
     title = video_path.stem
 
@@ -39,7 +45,7 @@ def update_title(video_path: pathlib.Path):
     return True
 
 def main():
-    folder = input("Enter folder path containing videos: ").strip('"').strip()
+    folder = normalize_path_input(input("Enter folder path containing videos: "))
     base_path = pathlib.Path(folder)
 
     if not base_path.exists() or not base_path.is_dir():

@@ -9,6 +9,12 @@ REQUEST_DELAY = 0.1  # seconds (Scryfall recommends max 10 requests/sec)
 
 OUTPUT_DIR = r"C:\Users\SrulC\Downloads\MTG Images"  # fixed output folder
 
+def normalize_path_input(value: str) -> str:
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 
 def ensure_directory(path: str) -> None:
     os.makedirs(path, exist_ok=True)
@@ -96,7 +102,7 @@ def resolve_card(row: Dict) -> Optional[Dict]:
 
 
 def main():
-    csv_path = input("Enter path to CSV file: ").strip()
+    csv_path = normalize_path_input(input("Enter path to CSV file: "))
     ensure_directory(OUTPUT_DIR)
 
     for row in read_csv(csv_path):

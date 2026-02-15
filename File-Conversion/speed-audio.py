@@ -6,6 +6,12 @@ import shutil
 # Common audio extensions to process
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".flac", ".aac", ".m4a", ".ogg", ".opus", ".wma"}
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def is_audio_file(filename):
     return os.path.splitext(filename)[1].lower() in AUDIO_EXTENSIONS
 
@@ -50,7 +56,7 @@ def process_file(filepath, speed):
     shutil.move(temp_path, filepath)
 
 def main():
-    folder = input("Enter folder path containing audio files: ").strip()
+    folder = normalize_path_input(input("Enter folder path containing audio files: "))
     speed = float(input("Enter playback speed (e.g., 0.8, 1.25, 2.0): ").strip())
 
     if not os.path.isdir(folder):

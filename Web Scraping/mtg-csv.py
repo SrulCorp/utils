@@ -16,6 +16,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+def normalize_path_input(value: str) -> str:
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 
 def read_csv(path: str):
     logger.info("Reading input CSV: %s", path)
@@ -113,8 +119,8 @@ def resolve_card(row: Dict) -> Optional[Dict]:
 
 
 def main():
-    input_csv = input("Enter path to input CSV: ").strip()
-    output_csv = input("Enter path to output CSV: ").strip()
+    input_csv = normalize_path_input(input("Enter path to input CSV: "))
+    output_csv = normalize_path_input(input("Enter path to output CSV: "))
 
     logger.info("Starting processing")
     logger.info("Input CSV: %s", input_csv)

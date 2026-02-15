@@ -3,6 +3,12 @@ import sys
 import tempfile
 from pathlib import Path
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def run(cmd):
     subprocess.run(cmd, check=True)
 
@@ -38,7 +44,7 @@ def extract_cover(file, out):
 
 def prompt_folder():
     while True:
-        folder = input("Enter folder containing MP3 files: ").strip('" ')
+        folder = normalize_path_input(input("Enter folder containing MP3 files: "))
         path = Path(folder)
         if path.exists() and path.is_dir():
             return path

@@ -1,5 +1,11 @@
 import os
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def rename_index_files(root_dir: str) -> None:
     for current_dir, _, files in os.walk(root_dir):
         if "index.html" in files:
@@ -17,7 +23,7 @@ def rename_index_files(root_dir: str) -> None:
             print(f"RENAMED: {old_path} -> {new_path}")
 
 if __name__ == "__main__":
-    root_directory = input("Enter the root directory to process: ").strip()
+    root_directory = normalize_path_input(input("Enter the root directory to process: "))
 
     if not os.path.isdir(root_directory):
         print("ERROR: Provided path is not a valid directory.")

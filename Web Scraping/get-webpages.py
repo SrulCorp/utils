@@ -4,6 +4,12 @@ import requests
 from bs4 import BeautifulSoup
 import ast
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def ask_url_input_mode():
     while True:
         choice = input("Would you like to:\n1. Enter URLs one by one\n2. Paste a list of URLs (Python-style array)\nChoose 1 or 2: ").strip()
@@ -39,7 +45,7 @@ def get_urls_from_array():
 
 def get_directory():
     while True:
-        directory = input("Enter the directory where text files should be saved: ").strip()
+        directory = normalize_path_input(input("Enter the directory where text files should be saved: "))
         if not os.path.exists(directory):
             try:
                 os.makedirs(directory)

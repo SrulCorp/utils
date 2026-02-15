@@ -3,6 +3,12 @@ from ebooklib import epub
 from bs4 import BeautifulSoup
 import ebooklib
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 
 def convert_epub_to_text(epub_path, output_path):
     try:
@@ -29,6 +35,6 @@ def find_and_convert_epubs(directory):
 
 
 if __name__ == '__main__':
-    directory = input("Enter the directory to search for .epub files: ")
+    directory = normalize_path_input(input("Enter the directory to search for .epub files: "))
     find_and_convert_epubs(directory)
     

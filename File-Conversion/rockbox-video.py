@@ -14,6 +14,12 @@ VIDEO_EXTS = {".mp4", ".mkv", ".avi", ".mov", ".webm", ".flv", ".wmv", ".mpg", "
 
 # ------------------------------------------
 
+def normalize_path_input(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1].strip()
+    return value
+
 def ask(prompt, default=None):
     if default:
         prompt = f"{prompt} [{default}]: "
@@ -27,8 +33,8 @@ def ask(prompt, default=None):
 def main():
     print("\nRockbox MPEG Encoder — Maximum Stability Profile\n")
 
-    src_dir = Path(ask("Source directory", "D:\\Videos"))
-    out_dir = Path(ask("Output directory", "D:\\iPodVideos"))
+    src_dir = Path(normalize_path_input(ask("Source directory", "D:\\Videos")))
+    out_dir = Path(normalize_path_input(ask("Output directory", "D:\\iPodVideos")))
 
     print("\nQuality profiles:")
     for k, (name, *_ ) in PROFILES.items():
